@@ -1,0 +1,177 @@
+html, body, div, span {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+} 
+
+body {
+  background-image: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/nasty_fabric.png);
+  font-family: 'Righteous', cursive;
+  color: black;
+}
+
+#outer-circle {
+  background-color: #385a94;
+  border-radius: 50%;
+  height: 500px;
+  width: 500px;
+  position: relative;
+  border: solid 10px black;
+  margin: auto;
+  margin-top: 60px;
+  box-shadow: 8px 8px 15px 5px #888;
+}
+
+#topleft {
+  background-color: #009f50;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  -moz-border-radius: 250px 0 0 0;
+  -webkit-border-radius: 250px 0 0 0;
+  border-radius: 250px 0 0 0; 
+  top: 50%;
+  left: 50%; 
+  margin: -250px 0 0 -250px;
+  border: solid 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#topright {
+  background-color: #f00;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  -moz-border-radius: 0 250px 0 0;
+  -webkit-border-radius: 0 250px 0 0;
+  border-radius: 0 250px 0 0; 
+  top: 50%;
+  left: 50%; 
+  margin: -250px 0 0 0;
+  border: solid 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#bottomleft {
+  background-color: #ffea00;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  -moz-border-radius: 0 0 0 250px;
+  -webkit-border-radius: 0 0 0 250px;
+  border-radius: 0 0 0 250px;
+  top: 50%;
+  left: 50%; 
+  margin: 0 -250px 0 -250px;
+  border: solid 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#bottomright {
+  background-color: #00f;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  -moz-border-radius: 0 0 250px 0;
+  -webkit-border-radius: 0 0 250px 0;
+  border-radius: 0 0 250px 0; 
+  top: 50%;
+  left: 50%; 
+  margin: 0 0 -250px 0;
+  border: solid 5px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#inner-circle {
+  border: solid 5px;
+  border-radius: 50%;
+  height: 250px;
+  width: 250px;
+  background: grey;
+  position: absolute;
+  clear: both;
+  z-index: 10;
+  margin: 125px 0 0 125px;
+  box-shadow: -6px 8px 5px 0px rgba(50, 50, 50, 0.75);
+  -webkit-box-shadow: -6px 8px 5px 0px rgba(50, 50, 50, 0.75);
+}
+
+#title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-left: 60px;
+  margin-top: 40px;
+}
+
+.inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.count {
+  background-color: #5e0000;
+  border: solid 2px black;
+  border-radius: 10px;
+  color: white;
+  width: 60px;
+  height: 45px;
+  margin-left: 10px;
+  font-size: 40px;
+}
+
+#start, #strict {
+  background-color: yellow;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  line-height: 55px;
+  margin: 0px;
+  margin-top: 5px;
+  margin-left: 20px;
+  border: solid 3px black;
+  border-radius: 30px;
+  width: 60px;
+  height: 60px;
+}
+
+p {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  margin-top: 10px;
+  margin-left: 90px;
+  padding: 0;
+}
+
+.toggle {
+  position: absolute;
+  top: 200px;
+  left: 115px;
+}
+
+ /*
+ .toggle {
+  position: absolute;
+  top: 180px;
+  left: 80px;
+  width: 90px;
+  height: 30px;
+  border: 2px black;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  background-color: #ff4d4d;
+ }
+*/
