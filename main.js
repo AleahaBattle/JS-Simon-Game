@@ -7,39 +7,69 @@ let compTurn;
 let intervalId;
 let strict = false;
 let noise = true;
-let on = false;
+let isPoweredOn = false;
+let areGameButtonsEnabled = false;
 let win;
-let boardSound = [
-  "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3", //green
-  "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3", //red
-  "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3", //yellow 
-  "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" //blue   
+
+const boardData = [
+  //green
+  {
+    id: 0,
+    sound: "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3",
+    onColor: "#40ff90",
+    offColor: "#009f50",
+    gameButton: document.querySelector("#topleft")
+  },
+  
+  //red
+  {
+    id: 1,
+    sound: "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3",
+    onColor: "#f00",
+    offColor: "#800",
+    gameButton: document.querySelector("#topright")
+  },
+  
+  //yellow
+  {
+    id: 2,
+    sound: "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3",
+    onColor: "#ffff40",
+    offColor: "#d09300",
+    gameButton: document.querySelector("#bottomleft")
+  },
+  
+  //blue
+  {
+    id: 3,
+    sound: "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3",
+    onColor: "#2af",
+    offColor: "#00f",
+    gameButton: document.querySelector("#bottomright")
+  }
 ];
 
 const turnCounter = document.querySelector(".count");
-const topLeft = document.querySelector("#topleft");
-const topRight = document.querySelector("#topright");
-const bottomLeft = document.querySelector("#bottomleft");
-const bottomRight = document.querySelector("#bottomright");
 const strictButton = document.querySelector("#strict");
 const onButton = document.querySelector("#on");
 const startButton = document.querySelector("#start");
 
 //listener for switch button
 onButton.addEventListener('click', (e) => {
+  areGameButtonsEnabled = false;
   if (onButton.checked == true) {
-    on = true;
+    isPoweredOn = true;
     turnCounter.textContent = "--";
   } else {
-    on = false;
+    isPoweredOn = false;
     turnCounter.textContent = "";
-    clearColor();
+    unhiliteAllGameButtons();
     clearInterval(intervalId);
   }
 });
 
 startButton.addEventListener('click', (e) => {
-  if (on || win) {
+  if (isPoweredOn || win) {
     play();
   }
 });
@@ -49,150 +79,99 @@ let play = () => {
   order = [];
   playerOrder = [];
   flash = 0;
+  clearInterval(intervalId);
   intervalId = 0;
+  unhiliteAllGameButtons();
   turn = 1;
   turnCounter.innerHTML = 1;
   good = true;
+  areGameButtonsEnabled = false;
   for (var i = 0; i < 20; i++) {
-    order.push(Math.floor(Math.random() * 4) + 1);
+    order.push(Math.floor(Math.random() * 4));
   }
   compTurn = true;
 
   intervalId = setInterval(gameTurn, 800);
-}
+};
 
 
 strictButton.addEventListener('click', (e) => {
-  if (strictButton.clicked == true) {
-    strict = true;
-  } else {
-    strict = false;
+  if (!isPoweredOn) {
+    return;
   }
+  
+  strict = !strict;
+  let prevContent = turnCounter.textContent;
+  turnCounter.textContent = strict ? "ON" : "OFF";
+  
+  setOneOffTimer(() => {
+    turnCounter.textContent = prevContent;
+  }, 500);
 });
 
 let gameTurn = () => {
-  on = false;
+  areGameButtonsEnabled = false;
 
   if (flash == turn) {
     clearInterval(intervalId);
     compTurn = false;
-    clearColor();
-    on = true;
+    unhiliteAllGameButtons();
+    areGameButtonsEnabled = true;
   }
 
   if (compTurn) {
-    clearColor();
-    setTimeout(() => {
-      if (order[flash] == 1) one();
-      if (order[flash] == 2) two();
-      if (order[flash] == 3) three();
-      if (order[flash] == 4) four();
+    unhiliteAllGameButtons();
+    setOneOffTimer(() => {
+      let index = order[flash];
+      presentGameButton(index);
       flash++;
     }, 200);
   }
-}
+};
 
-let one = id => {
+let presentGameButton = index => {
+  let data = boardData[index];
   if (noise) {
-    let audio = new Audio(boardSound[1]);
+    let audio = new Audio(data.sound);
     audio.play();
   }
   noise = true;
-  topLeft.style.backgroundColor = "lightgreen";
-}
+  data.gameButton.style.backgroundColor = data.onColor;
+};
 
-let two = id => {
-  if (noise) {
-    let audio = new Audio(boardSound[2]);
-    audio.play();
+let unhiliteAllGameButtons = () => {
+  boardData.forEach(data => {
+    data.gameButton.style.backgroundColor = data.offColor;
+  });
+};
+
+let hiliteAllGameButtons = () => {
+  boardData.forEach(data => {
+    data.gameButton.style.backgroundColor = data.onColor;
+  });
+};
+
+var onGameButtonClicked = event => {
+  if (!isPoweredOn || !areGameButtonsEnabled) {
+    return;
   }
-  noise = true;
-  topRight.style.backgroundColor = "red";
-}
 
-let three = id => {
-  if (noise) {
-    let audio = new Audio(boardSound[3]);
-    audio.play();
+  let button = event.target;
+  let boardDataIndex = button.boardDataIndex;
+  playerOrder.push(boardDataIndex);
+  check();
+  presentGameButton(boardDataIndex);
+  if (!win) {
+    setOneOffTimer(() => {
+      unhiliteAllGameButtons();
+    }, 300);
   }
-  noise = true;
-  bottomLeft.style.backgroundColor = "yellow";
-}
+};
 
-let four = id => {
-  if (noise) {
-    let audio = new Audio(boardSound[4]);
-    audio.play();
-  }
-  noise = true;
-  bottomRight.style.backgroundColor = "lightblue";
-}
-
-let clearColor = () => {
-  topLeft.style.backgroundColor = "#009f50";
-  topRight.style.backgroundColor = "#f00";
-  bottomLeft.style.backgroundColor = "#ffea00";
-  bottomRight.style.backgroundColor = "#00f";
-}
-
-let flashColor = () => {
-  topLeft.style.backgroundColor = "lightgreen";
-  topRight.style.backgroundColor = "red";
-  bottomLeft.style.backgroundColor = "yellow";
-  bottomRight.style.backgroundColor = "lightblue";
-}
-
-topLeft.addEventListener('click', (e) => {
-  if (on) {
-    playerOrder.push(1);
-    check();
-    one();
-    if (!win) {
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
-  }
-})
-
-topRight.addEventListener('click', (e) => {
-  if (on) {
-    playerOrder.push(2);
-    check();
-    two();
-    if (!win) {
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
-  }
-})
-
-bottomLeft.addEventListener('click', (e) => {
-  if (on) {
-    playerOrder.push(3);
-    check();
-    three();
-    if (!win) {
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
-  }
-})
-
-bottomRight.addEventListener('click', (e) => {
-  if (on) {
-    playerOrder.push(4);
-    check();
-    four();
-    if (!win) {
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
-  }
-})
+boardData.forEach((data, index) => {
+  data.gameButton.boardDataIndex = index;
+  data.gameButton.addEventListener('click', onGameButtonClicked);
+});
 
 let check = () => {
   if (playerOrder[playerOrder.length - 1] !== order[playerOrder.length - 1])
@@ -203,11 +182,12 @@ let check = () => {
   }
 
   if (good == false) {
-    flashColor();
+    hiliteAllGameButtons();
+    areGameButtonsEnabled = false;
     turnCounter.textContent = "ERR";
-    setTimeout(() => {
+    setOneOffTimer(() => {
       turnCounter.innerHTML = turn;
-      clearColor();
+      unhiliteAllGameButtons();
 
       if (strict) {
         play();
@@ -229,14 +209,23 @@ let check = () => {
     compTurn = true;
     flash = 0;
     turnCounter.innerHTML = turn;
+    areGameButtonsEnabled = false;
     intervalId = setInterval(gameTurn, 800);
   }
 
-}
+};
 
 let winGame = () => {
-  flashColor();
+  hiliteAllGameButtons();
   turnCounter.textContent = "WIN!";
-  on = false;
+  areGameButtonsEnabled = false;
   win = true;
-}
+};
+
+let setOneOffTimer = (callback, delay) => {
+  setTimeout(() => {
+    if (isPoweredOn) {
+      callback();
+    }
+  }, delay);
+};
