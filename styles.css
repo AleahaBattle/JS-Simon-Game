@@ -42,7 +42,7 @@ body {
 }
 
 #topright {
-  background-color: #f00;
+  background-color: #800;
   position: absolute;
   height: 250px;
   width: 250px;
@@ -59,7 +59,7 @@ body {
 }
 
 #bottomleft {
-  background-color: #ffea00;
+  background-color: #d09300;
   position: absolute;
   height: 250px;
   width: 250px;
