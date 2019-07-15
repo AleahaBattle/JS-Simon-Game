@@ -1,4 +1,4 @@
-# Simon-Game
+# Simon Game
 <p align="center">
 	<img src="game.png"></img>
 </p>
